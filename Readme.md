@@ -2,6 +2,6 @@
 
 This will contain the installation process and other system configuration.
 
-npm install
-npm run watch
-laravel serve --port [anyport]
+    npm install
+    npm run watch
+    php artisan serve --port [anyport]
