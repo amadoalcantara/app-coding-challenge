@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Event;
+use App\Http\Resources\Event as EventResource;
 
 class EventsController extends Controller
 {
@@ -14,7 +15,15 @@ class EventsController extends Controller
      */
     public function index()
     {
-        return Event::all();
+        $events = Event::orderBy('created_at', 'desc')->paginate(1);
+        return EventResource::collection($events)->additional([
+            'meta' => [
+                'version' => '1.0.0',
+                'API_base_url' => url('/'),
+                'author' => 'Amado F. Alcantara Jr.',
+                'copyright' => 'c 2019'
+            ]
+        ]);
     }
 
     /**
@@ -67,9 +76,9 @@ class EventsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, $eventname)
     {
-        $event = Event::findOrfail($id);
+        $event = Event::findOrfail($eventname);
         $event->update($request->all());
 
         return $event;
